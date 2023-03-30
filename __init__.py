@@ -38,6 +38,13 @@ class Command:
         ini_write(fn_config, 'op', 'option_int', str(option_int))
         ini_write(fn_config, 'op', 'option_bool', bool_to_str(option_bool))
         file_open(fn_config)
+        
+    def on_change_slow(self, ed_self):
+        carets = ed_self.get_carets()
+        x1, nline, x2, y2 = carets[0]
+        txt = ed_self.get_text_line(nline, 200)
+        print( txt )
+        self.insert_file(ed_self, txt, nline)
 
     def on_open(self, ed_self):
         fn_ed = ed_self.get_filename()

@@ -1,16 +1,10 @@
 [info]
 title=Markdown Image
-desc=show markdown image, only work when open md files
+desc=show markdown image
 type=cudatext-plugin
 subdir=cuda_markdown_image
 homepage=https://github.com/jackusay/cuda_markdown_image
 
 [item1]
 section=events
-events=on_open
-
-[item2]
-section=commands
-caption=Markdown Image
-method=run
-
+events=on_open,on_change_slow
