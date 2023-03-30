@@ -1,4 +1,4 @@
 Markdown Image
-show markdown image between lines.
+show markdown local image between lines.
 
-Author: jackusay
+Author: jackusay, some components are from Alexey-T
