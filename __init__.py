@@ -38,18 +38,31 @@ class Command:
         ini_write(fn_config, 'op', 'option_int', str(option_int))
         ini_write(fn_config, 'op', 'option_bool', bool_to_str(option_bool))
         file_open(fn_config)
+
+    def on_open(self, ed_self):
+        fn_ed = ed_self.get_filename()
+        #if not fn_ed: return #unsaved file???
+        print(fn_ed)
+        filename, file_extension = os.path.splitext(fn_ed)
+        if file_extension != ".md": return
+        
+        all_text = ed_self.get_text_all()
+        #print(all_text)
+        for index, line in enumerate(all_text.split("\n")):
+            #print(line)
+            self.insert_file(ed_self, line, index)
         
     def run(self):
-        s = '''
-        file lines count: {cnt}
-        option_int: {i}
-        option_bool: {b}
-        '''.format(
-             cnt = ed.get_line_count(),
-             i = option_int,
-             b = option_bool,
-             )
-        msg_box(s, MB_OK)
+        # s = '''
+        # file lines count: {cnt}
+        # option_int: {i}
+        # option_bool: {b}
+        # '''.format(
+             # cnt = ed.get_line_count(),
+             # i = option_int,
+             # b = option_bool,
+             # )
+        # msg_box(s, MB_OK)
         
         filepath=ed.get_filename()
         print(filepath)
@@ -61,24 +74,42 @@ class Command:
         x1, nline, x2, y2 = carets[0]
         txt = ed.get_text_line(nline, 300)
         print( txt )
+        self.insert_file(txt)
 
+    def insert_file(self, ed_self, txt, nline):
         import re       
         x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
-        print(x)
+        #print(x)
         if not x:
-            print("Can't find image syntax.")
+            #print("Can't find image syntax.")
             return
         q = re.search("!\[[^\]]+\]", x[0]) #get title ex: ![sdff]
         print(q.group()[2:-1])
-        p = re.search("\([^\ )]+", x[0]) #get url ex: (https://octodex.github.com/images/stormtroopocat.jpg
-        print(p.group()[1:])
+        p = re.search("\([^\)]+", x[0]) #get url ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
+        pp = p.group()[1:]
+        url = pp.split("\"")[0].strip() #get url
         
-        fn = os.path.dirname(filepath) + "/" + p.group()[1:]
-        #fn = p.group()[1:]
+
+        print("url: " + url)
+        print(url.split("\""))
+        
+        is_online_url = False
+        from urllib.parse import urlparse
+        if urlparse(url).scheme in ('http', 'https'):
+            is_online_url = True
+            return
+        
+        print(os.path.isabs(url))
+        if os.path.isabs(url):
+            fn = url
+        else:
+            filepath = ed_self.get_filename()
+            fn = os.path.join(os.path.dirname(filepath), url)
+        
         ntag = 2 #???
         size_x = BIG_SIZE
         size_y = BIG_SIZE
-        self.add_pic(ed, nline, fn, size_x, size_y, ntag)
+        self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
         ed.set_prop(PROP_MODIFIED, '1')
         msg_status(PRE+'Added "%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline))
 

@@ -1,9 +1,13 @@
 [info]
 title=Markdown Image
-desc=click menu to show markdown image, only work when carret is on the image syntax line
+desc=show markdown image, only work when open md files
 type=cudatext-plugin
 subdir=cuda_markdown_image
 homepage=https://github.com/jackusay/cuda_markdown_image
+
+[item1]
+section=events
+events=on_open
 
 [item2]
 section=commands
