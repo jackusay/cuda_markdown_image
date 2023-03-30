@@ -1,0 +1,12 @@
+[info]
+title=Markdown Image
+desc=click menu to show markdown image, only work when carret is on the image syntax line
+type=cudatext-plugin
+subdir=cuda_markdown_image
+homepage=https://github.com/jackusay/cuda_markdown_image
+
+[item2]
+section=commands
+caption=Markdown Image
+method=run
+
