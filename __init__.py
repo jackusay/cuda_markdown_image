@@ -3,6 +3,8 @@ import os
 from cudatext import *
 from cudax_lib import get_translation
 
+from urllib.parse import urlparse #check if Online URL
+
 PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
 BIG_SIZE = 500 #if width bigger, ask to resize
 DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
@@ -16,28 +18,15 @@ id_img = image_proc(0, IMAGE_CREATE)
 
 _   = get_translation(__file__)  # I18N
 
-fn_config = os.path.join(app_path(APP_DIR_SETTINGS), 'cuda_test1.ini')
-
-option_int = 100
-option_bool = True
-
-def bool_to_str(v): return '1' if v else '0'
-def str_to_bool(s): return s=='1'
-
 class Command:
     
     def __init__(self):
 
-        global option_int
-        global option_bool
-        option_int = int(ini_read(fn_config, 'op', 'option_int', str(option_int)))
-        option_bool = str_to_bool(ini_read(fn_config, 'op', 'option_bool', bool_to_str(option_bool)))
+        pass
 
     def config(self):
 
-        ini_write(fn_config, 'op', 'option_int', str(option_int))
-        ini_write(fn_config, 'op', 'option_bool', bool_to_str(option_bool))
-        file_open(fn_config)
+        pass
         
     def on_change_slow(self, ed_self):
         carets = ed_self.get_carets()
@@ -66,16 +55,6 @@ class Command:
         #    self.insert_file(ed_self, line, index)
         
     def run(self):
-        # s = '''
-        # file lines count: {cnt}
-        # option_int: {i}
-        # option_bool: {b}
-        # '''.format(
-             # cnt = ed.get_line_count(),
-             # i = option_int,
-             # b = option_bool,
-             # )
-        # msg_box(s, MB_OK)
         
         filepath=ed.get_filename()
         print(filepath)
@@ -106,10 +85,8 @@ class Command:
         print("url: " + url)
         print(url.split("\""))
         
-        is_online_url = False
-        from urllib.parse import urlparse
+        #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
-            is_online_url = True
             return
         
         print(os.path.isabs(url))
