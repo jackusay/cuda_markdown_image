@@ -1,12 +1,13 @@
 #md img preview
 import os
 from cudatext import *
+from .img_size import get_image_size
 #from cudax_lib import get_translation
 
 from urllib.parse import urlparse #check if Online URL
 
 #PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
-BIG_SIZE = 400 #if width bigger, ask to resize
+BIG_SIZE = 500 #if width bigger, ask to resize
 #DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
 PRE = '[Markdown Image] '
 MIN_H = 10 #limitations of api to gap height
@@ -79,8 +80,25 @@ class Command:
             ed_self.gap(GAP_DELETE, nline, nline)
         
         ntag = 2 #for delete
-        size_x = BIG_SIZE
-        size_y = BIG_SIZE
+        
+        res = get_image_size(fn)
+        if not res:
+            msg_status(PRE+'Cannot detect picture sizes')
+            return
+        size_x, size_y = res
+        
+        #reduce size and keep aspect ratio
+        if size_x > BIG_SIZE or size_y > BIG_SIZE:
+            if size_x >= size_y:
+                # y / x = ? / max
+                # ? = y / x * max
+                size_y = round(size_y / size_x * BIG_SIZE)
+                size_x = BIG_SIZE
+            else:
+                size_x = round(size_x / size_y * BIG_SIZE)
+                size_y = BIG_SIZE       
+        if size_y < MIN_H: new_y = MIN_H
+
         self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
         ed.set_prop(PROP_MODIFIED, '1')
         msg_status(PRE+'Added "%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline))
