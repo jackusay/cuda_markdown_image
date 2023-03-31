@@ -16,7 +16,6 @@ data_all = {}
 id_img = image_proc(0, IMAGE_CREATE)
 
 
-_   = get_translation(__file__)  # I18N
 
 class Command:
     
@@ -36,14 +35,11 @@ class Command:
         self.insert_file(ed_self, txt, nline)
 
     def on_open(self, ed_self):
-        fn_ed = ed_self.get_filename()
+        #fn_ed = ed_self.get_filename()
         #if not fn_ed: return #unsaved file???
-        print(fn_ed)
-        filename, file_extension = os.path.splitext(fn_ed)
-        if file_extension != ".md": return
         
-        print("count: ")
-        print(ed_self.get_line_count())
+        #print("count: ")
+        #print(ed_self.get_line_count())
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index, max_len=200)
             self.insert_file(ed_self, line, index)
@@ -53,6 +49,12 @@ class Command:
         #for index, line in enumerate(all_text.split("\n")):
             #print(line)
         #    self.insert_file(ed_self, line, index)
+        
+    def on_lexer(self, ed_self):
+        print("========on_lexer_parsed==============")
+        for index in range(ed_self.get_line_count()):
+            line = ed_self.get_text_line(index, max_len=200)
+            self.insert_file(ed_self, line, index)
         
     def run(self):
         
