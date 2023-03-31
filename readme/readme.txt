@@ -16,3 +16,5 @@ below the text line.
 
 Author: jackusay
 some functions are from: Alexey Torgashin
+
+License: MIT
