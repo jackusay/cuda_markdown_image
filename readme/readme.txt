@@ -1,4 +1,5 @@
 Markdown Image
-show markdown image between lines.
+show markdown *local* image between lines.
 
 Author: jackusay
+some function is from: Alexey Torgashin
