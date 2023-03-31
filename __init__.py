@@ -112,6 +112,9 @@ class Command:
         else:
             filepath = ed_self.get_filename()
             fn = os.path.join(os.path.dirname(filepath), url)
+            
+        if not os.path.isfile(fn):
+            ed_self.gap(GAP_DELETE, nline, nline)
         
         ntag = 2 #???
         size_x = BIG_SIZE
