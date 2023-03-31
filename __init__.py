@@ -33,7 +33,6 @@ class Command:
         carets = ed_self.get_carets()
         x1, nline, x2, y2 = carets[0]
         txt = ed_self.get_text_line(nline)
-        #print( txt )
         self.insert_file(ed_self, txt, nline)
 
     def on_open(self, ed_self):
@@ -46,7 +45,6 @@ class Command:
         
         
     def on_lexer(self, ed_self):
-        #print("========on_lexer_parsed==============")
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
@@ -55,25 +53,22 @@ class Command:
     def insert_file(self, ed_self, txt, nline):
         import re       
         x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
-        #print(x)
+        log(f"image syntax: {x}")
         if not x:
-            #print("Can't find image syntax.")
+            log("Can't find image syntax.")
             return
-        q = re.search("!\[[^\]]+\]", x[0]) #get title ex: ![sdff]
-        #print(q.group()[2:-1])
-        p = re.search("\([^\)]+", x[0]) #get url ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
+        #q = re.search("!\[[^\]]+\]", x[0]) #get title ex: ![sdff]
+        #log(q.group()[2:-1])
+        p = re.search("\([^\)]+", x[0]) #get () part ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
         pp = p.group()[1:]
         url = pp.split("\"")[0].strip() #get url
-        
-
-        #print("url: " + url)
-        #print(url.split("\""))
+        log(f"url: {url}")
         
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
         
-        #print(os.path.isabs(url))
+        log(f"absolute path?: {os.path.isabs(url)}")
         if os.path.isabs(url):
             fn = url
         else:
@@ -93,10 +88,10 @@ class Command:
     def add_pic(self, ed, nline, fn, size_x, size_y, ntag):
 
         global id_img
-        #print(id_img)
-        #print(fn)
+        log(id_img)
+        log(fn)
         if not image_proc(id_img, IMAGE_LOAD, fn):
-           log(PRE+'Cannot load "%s"' % os.path.basename(fn))
+           print(PRE+'Cannot load "%s"' % os.path.basename(fn))
            return
 
         new_y = None
@@ -115,5 +110,5 @@ class Command:
         ed.gap(GAP_DELETE, nline, nline)
         ed.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
 
-        log(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
+        print(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
 
