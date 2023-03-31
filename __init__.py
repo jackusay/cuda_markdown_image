@@ -16,7 +16,7 @@ data_all = {}
 id_img = image_proc(0, IMAGE_CREATE)
 
 def log(s):
-    print(s)
+    #print(s)
     pass
 
 class Command:
