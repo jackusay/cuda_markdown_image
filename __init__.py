@@ -53,11 +53,17 @@ class Command:
         filename, file_extension = os.path.splitext(fn_ed)
         if file_extension != ".md": return
         
-        all_text = ed_self.get_text_all()
-        #print(all_text)
-        for index, line in enumerate(all_text.split("\n")):
-            #print(line)
+        print("count: ")
+        print(ed_self.get_line_count())
+        for index in range(ed_self.get_line_count()):
+            line = ed_self.get_text_line(index, max_len=200)
             self.insert_file(ed_self, line, index)
+        
+        #all_text = ed_self.get_text_all()
+        #print(all_text)
+        #for index, line in enumerate(all_text.split("\n")):
+            #print(line)
+        #    self.insert_file(ed_self, line, index)
         
     def run(self):
         # s = '''
