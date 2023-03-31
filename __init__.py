@@ -31,7 +31,7 @@ class Command:
         carets = ed_self.get_carets()
         x1, nline, x2, y2 = carets[0]
         txt = ed_self.get_text_line(nline, 200)
-        print( txt )
+        #print( txt )
         self.insert_file(ed_self, txt, nline)
 
     def on_open(self, ed_self):
@@ -41,7 +41,7 @@ class Command:
         #print("count: ")
         #print(ed_self.get_line_count())
         for index in range(ed_self.get_line_count()):
-            line = ed_self.get_text_line(index, max_len=200)
+            line = ed_self.get_text_line(index, 200)
             self.insert_file(ed_self, line, index)
         
         #all_text = ed_self.get_text_all()
@@ -51,15 +51,15 @@ class Command:
         #    self.insert_file(ed_self, line, index)
         
     def on_lexer(self, ed_self):
-        print("========on_lexer_parsed==============")
+        #print("========on_lexer_parsed==============")
         for index in range(ed_self.get_line_count()):
-            line = ed_self.get_text_line(index, max_len=200)
+            line = ed_self.get_text_line(index, 200)
             self.insert_file(ed_self, line, index)
         
     def run(self):
         
         filepath=ed.get_filename()
-        print(filepath)
+        #print(filepath)
         # with open(filepath, encoding='utf8') as f:
         ##with open("rr.txt", encoding='utf8') as f:
             # print(f.read())
@@ -67,7 +67,7 @@ class Command:
         carets = ed.get_carets()
         x1, nline, x2, y2 = carets[0]
         txt = ed.get_text_line(nline, 300)
-        print( txt )
+        #print( txt )
         self.insert_file(txt)
 
     def insert_file(self, ed_self, txt, nline):
@@ -78,20 +78,20 @@ class Command:
             #print("Can't find image syntax.")
             return
         q = re.search("!\[[^\]]+\]", x[0]) #get title ex: ![sdff]
-        print(q.group()[2:-1])
+        #print(q.group()[2:-1])
         p = re.search("\([^\)]+", x[0]) #get url ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
         pp = p.group()[1:]
         url = pp.split("\"")[0].strip() #get url
         
 
-        print("url: " + url)
-        print(url.split("\""))
+        #print("url: " + url)
+        #print(url.split("\""))
         
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
         
-        print(os.path.isabs(url))
+        #print(os.path.isabs(url))
         if os.path.isabs(url):
             fn = url
         else:
@@ -111,10 +111,10 @@ class Command:
     def add_pic(self, ed, nline, fn, size_x, size_y, ntag):
 
         global id_img
-        print(id_img)
-        print(fn)
+        #print(id_img)
+        #print(fn)
         if not image_proc(id_img, IMAGE_LOAD, fn):
-           print(PRE+'Cannot load "%s"' % os.path.basename(fn))
+           log(PRE+'Cannot load "%s"' % os.path.basename(fn))
            return
 
         new_y = None
@@ -133,4 +133,8 @@ class Command:
         ed.gap(GAP_DELETE, nline, nline)
         ed.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
 
-        print(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
+        log(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
+		
+	def log(s):
+        #print(s)
+        pass
