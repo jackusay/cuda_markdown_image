@@ -8,7 +8,7 @@ from urllib.parse import urlparse #check if Online URL
 PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
 BIG_SIZE = 500 #if width bigger, ask to resize
 DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
-PRE = '[Insert Pics] '
+PRE = '[Markdown Image] '
 MIN_H = 10 #limitations of api to gap height
 MAX_H = 500-5
 
