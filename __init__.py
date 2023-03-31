@@ -70,8 +70,11 @@ class Command:
             return
         
         log(f"absolute path?: {os.path.isabs(url)}")
-        if os.path.isabs(url):
-            fn = url
+        #                                                  os.path.isabs()    urlparse(url).scheme in ('file')
+        # file://C:\Windows\System32\SecurityAndMaintenance.png  False            True
+        # file:///C:\Windows\System32\SecurityAndMaintenance.png  False           True
+        if os.path.isabs(url) or urlparse(url).scheme in ('file'):
+            fn = url            
         else:
             filepath = ed_self.get_filename()
             fn = os.path.join(os.path.dirname(filepath), url)
