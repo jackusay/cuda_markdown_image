@@ -65,22 +65,33 @@ class Command:
         url = pp.split("\"")[0].strip() #get url
         log(f"url: {url}")
         
+        
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
         
+        #strip file:/// leading
+        file_scheme_leading = re.findall("file:///", url)
+        if file_scheme_leading:
+            url = url[8:]
+            log(f"url: {url}")
+          
         log(f"absolute path?: {os.path.isabs(url)}")
-        #                                                  os.path.isabs()    urlparse(url).scheme in ('file')
-        # file://C:\Windows\System32\SecurityAndMaintenance.png  False            True
-        # file:///C:\Windows\System32\SecurityAndMaintenance.png  False           True
-        if os.path.isabs(url) or urlparse(url).scheme in ('file'):
+        #                                           os.path.isabs()    urlparse(url).scheme in ('file')
+        # file://C:\Windows\System32\Security.png   False              True
+        # file:///C:\Windows\System32\Security.png  False              True
+        #                                    0.jpg  False              True
+        if os.path.isabs(url):
             fn = url            
         else:
             filepath = ed_self.get_filename()
             fn = os.path.join(os.path.dirname(filepath), url)
+
             
         if not os.path.isfile(fn):
             ed_self.gap(GAP_DELETE, nline, nline)
+            msg_status(PRE+'Cannot find picture.')
+            return
         
         ntag = 2 #for delete
         
