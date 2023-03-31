@@ -1,13 +1,13 @@
 #md img preview
 import os
 from cudatext import *
-from cudax_lib import get_translation
+#from cudax_lib import get_translation
 
 from urllib.parse import urlparse #check if Online URL
 
-PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
-BIG_SIZE = 500 #if width bigger, ask to resize
-DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
+#PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
+BIG_SIZE = 400 #if width bigger, ask to resize
+#DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
 PRE = '[Markdown Image] '
 MIN_H = 10 #limitations of api to gap height
 MAX_H = 500-5
@@ -15,7 +15,9 @@ MAX_H = 500-5
 data_all = {}
 id_img = image_proc(0, IMAGE_CREATE)
 
-
+def log(s):
+    print(s)
+    pass
 
 class Command:
     
@@ -30,7 +32,7 @@ class Command:
     def on_change_slow(self, ed_self):
         carets = ed_self.get_carets()
         x1, nline, x2, y2 = carets[0]
-        txt = ed_self.get_text_line(nline, 200)
+        txt = ed_self.get_text_line(nline)
         #print( txt )
         self.insert_file(ed_self, txt, nline)
 
@@ -39,25 +41,16 @@ class Command:
         #if not fn_ed: return #unsaved file???
         
         for index in range(ed_self.get_line_count()):
-            line = ed_self.get_text_line(index, 200)
+            line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
         
         
     def on_lexer(self, ed_self):
         #print("========on_lexer_parsed==============")
         for index in range(ed_self.get_line_count()):
-            line = ed_self.get_text_line(index, 200)
+            line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
-        
-    def run(self):
-        
-        filepath=ed.get_filename()
-        
-        carets = ed.get_carets()
-        x1, nline, x2, y2 = carets[0]
-        txt = ed.get_text_line(nline, 300)
-        #print( txt )
-        self.insert_file(txt)
+
 
     def insert_file(self, ed_self, txt, nline):
         import re       
@@ -90,7 +83,7 @@ class Command:
         if not os.path.isfile(fn):
             ed_self.gap(GAP_DELETE, nline, nline)
         
-        ntag = 2 #???
+        ntag = 2 #for delete
         size_x = BIG_SIZE
         size_y = BIG_SIZE
         self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
@@ -123,7 +116,4 @@ class Command:
         ed.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
 
         log(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
-		
-	def log(s):
-        #print(s)
-        pass
+
