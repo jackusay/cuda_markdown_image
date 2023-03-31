@@ -1,10 +1,11 @@
 [info]
 title=Markdown Image
-desc=show markdown image
+desc=Previews local picture links in inter-line gaps, in Markdown files
 type=cudatext-plugin
 subdir=cuda_markdown_image
 homepage=https://github.com/jackusay/cuda_markdown_image
 
 [item1]
 section=events
-events=on_open,on_change_slow
+events=on_open,on_lexer,on_change_slow
+lexers=Markdown
