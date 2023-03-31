@@ -38,17 +38,10 @@ class Command:
         #fn_ed = ed_self.get_filename()
         #if not fn_ed: return #unsaved file???
         
-        #print("count: ")
-        #print(ed_self.get_line_count())
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index, 200)
             self.insert_file(ed_self, line, index)
         
-        #all_text = ed_self.get_text_all()
-        #print(all_text)
-        #for index, line in enumerate(all_text.split("\n")):
-            #print(line)
-        #    self.insert_file(ed_self, line, index)
         
     def on_lexer(self, ed_self):
         #print("========on_lexer_parsed==============")
@@ -59,10 +52,6 @@ class Command:
     def run(self):
         
         filepath=ed.get_filename()
-        #print(filepath)
-        # with open(filepath, encoding='utf8') as f:
-        ##with open("rr.txt", encoding='utf8') as f:
-            # print(f.read())
         
         carets = ed.get_carets()
         x1, nline, x2, y2 = carets[0]
