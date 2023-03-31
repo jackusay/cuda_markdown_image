@@ -52,6 +52,7 @@ class Command:
 
 
     def insert_file(self, ed_self, txt, nline):
+        #url can't mix with ), otherwise it become unsure ) is url or part of image syntax.
         import re       
         x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
         log(f"image syntax: {x}")
@@ -114,10 +115,10 @@ class Command:
         if size_y < MIN_H: new_y = MIN_H
 
         self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
-        ed.set_prop(PROP_MODIFIED, '1')
+        ed_self.set_prop(PROP_MODIFIED, '1')
         msg_status(PRE+'Added "%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline))
 
-    def add_pic(self, ed, nline, fn, size_x, size_y, ntag):
+    def add_pic(self, ed_self, nline, fn, size_x, size_y, ntag):
 
         global id_img
         log(id_img)
@@ -133,14 +134,14 @@ class Command:
             size_x = round(size_x/size_y*new_y)
             size_y = new_y
 
-        id_bitmap, id_canvas = ed.gap(GAP_MAKE_BITMAP, size_x, size_y)
+        id_bitmap, id_canvas = ed_self.gap(GAP_MAKE_BITMAP, size_x, size_y)
         canvas_proc(id_canvas, CANVAS_SET_BRUSH, color=0xffffff)
         canvas_proc(id_canvas, CANVAS_RECT_FILL, x=0, y=0, x2=size_x, y2=size_y)
 
         image_proc(id_img, IMAGE_PAINT_SIZED, (id_canvas, 0, 0, size_x, size_y))
 
-        ed.gap(GAP_DELETE, nline, nline)
-        ed.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
+        ed_self.gap(GAP_DELETE, nline, nline)
+        ed_self.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
 
         print(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
 
