@@ -43,15 +43,14 @@ class Command:
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
-        
-        
+               
     def on_lexer(self, ed_self):
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
 
-
     def insert_file(self, ed_self, txt, nline):
+        ##### parse syntax #####
         #url can't mix with ), otherwise it become unsure ) is url or part of image syntax.
         import re       
         x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
@@ -65,8 +64,10 @@ class Command:
         pp = p.group()[1:]
         url = pp.split("\"")[0].strip() #get url
         log(f"url: {url}")
+        #########################
         
         
+        ##### detect URL #####
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
@@ -87,6 +88,7 @@ class Command:
         else:
             filepath = ed_self.get_filename()
             fn = os.path.join(os.path.dirname(filepath), url)
+        #########################
 
             
         if not os.path.isfile(fn):
