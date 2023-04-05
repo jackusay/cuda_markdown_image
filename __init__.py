@@ -6,6 +6,9 @@ from .img_size import get_image_size
 
 from urllib.parse import urlparse #check if Online URL
 
+from cudax_lib import get_translation
+_ = get_translation(__file__)  # I18N
+
 #PIC_TAG = 0x1000 #minimal tag for api (CRC adds to tag)
 BIG_SIZE = 500 #if width bigger, ask to resize
 #DIALOG_FILTER = 'Pictures|*.png;*.jpg;*.jpeg;*.jpe;*.gif;*.bmp;*.ico'
@@ -43,14 +46,15 @@ class Command:
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
-               
+
+
     def on_lexer(self, ed_self):
         for index in range(ed_self.get_line_count()):
             line = ed_self.get_text_line(index)
             self.insert_file(ed_self, line, index)
 
+
     def insert_file(self, ed_self, txt, nline):
-        ##### parse syntax #####
         #url can't mix with ), otherwise it become unsure ) is url or part of image syntax.
         import re       
         x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
@@ -64,10 +68,8 @@ class Command:
         pp = p.group()[1:]
         url = pp.split("\"")[0].strip() #get url
         log(f"url: {url}")
-        #########################
         
         
-        ##### detect URL #####
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
@@ -88,19 +90,18 @@ class Command:
         else:
             filepath = ed_self.get_filename()
             fn = os.path.join(os.path.dirname(filepath), url)
-        #########################
 
             
         if not os.path.isfile(fn):
             ed_self.gap(GAP_DELETE, nline, nline)
-            msg_status(PRE+'Cannot find picture.')
+            msg_status(PRE + _('Cannot find picture'))
             return
         
         ntag = 2 #for delete
         
         res = get_image_size(fn)
         if not res:
-            msg_status(PRE+'Cannot detect picture sizes')
+            msg_status(PRE + _('Cannot detect picture sizes'))
             return
         size_x, size_y = res
         
@@ -118,7 +119,7 @@ class Command:
 
         self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
         ed_self.set_prop(PROP_MODIFIED, '1')
-        msg_status(PRE+'Added "%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline))
+        msg_status(PRE + _('Added "%s", %dx%d, line %d') % (os.path.basename(fn), size_x, size_y, nline))
 
     def add_pic(self, ed_self, nline, fn, size_x, size_y, ntag):
 
@@ -126,7 +127,7 @@ class Command:
         log(id_img)
         log(fn)
         if not image_proc(id_img, IMAGE_LOAD, fn):
-           print(PRE+'Cannot load "%s"' % os.path.basename(fn))
+           print(PRE + _('Cannot load "%s"') % os.path.basename(fn))
            return
 
         new_y = None
@@ -145,5 +146,5 @@ class Command:
         ed_self.gap(GAP_DELETE, nline, nline)
         ed_self.gap(GAP_ADD, nline, id_bitmap, tag=ntag)
 
-        print(PRE+'"%s", %dx%d, line %d' % (os.path.basename(fn), size_x, size_y, nline+1))
+        print(PRE + _('"%s", %dx%d, line %d') % (os.path.basename(fn), size_x, size_y, nline+1))
 
