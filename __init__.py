@@ -115,10 +115,14 @@ class Command:
             else:
                 size_x = round(size_x / size_y * BIG_SIZE)
                 size_y = BIG_SIZE       
-        if size_y < MIN_H: new_y = MIN_H
+        if size_y < MIN_H:
+            size_y = MIN_H
 
         self.add_pic(ed_self, nline, fn, size_x, size_y, ntag)
-        ed_self.set_prop(PROP_MODIFIED, '1')
+
+        ## better don't set PROP_MODIFIED
+        #ed_self.set_prop(PROP_MODIFIED, True)
+
         msg_status(PRE + _('Added "%s", %dx%d, line %d') % (os.path.basename(fn), size_x, size_y, nline))
 
     def add_pic(self, ed_self, nline, fn, size_x, size_y, ntag):
