@@ -80,6 +80,13 @@ class Command:
         #if online URL, return
         if urlparse(url).scheme in ('http', 'https'):
             return
+            
+        #>>> from urllib.parse import urlparse
+        #>>> urlparse('img/screen.png')
+        #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='', fragment='')
+        #>>> urlparse('img/screen.png?raw=true')
+        #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='raw=true', fragment='')
+        url = urlparse(url).path #strip query string
         
         #strip file:/// leading
         file_scheme_leading = re.findall("file:///", url)
