@@ -38,6 +38,7 @@ def get_url(txt):
     p = re.search("\([^\)]+", x[0]) #get (... part ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
     pp = p.group()[1:] #strip prefix (
     url = pp.split("\"")[0].strip() #get url
+    url = url.split("?")[0] #strip query string  ex: cat.img?key&value > cat.img
     log(f"url: {url}")  
     return url
 
@@ -86,7 +87,10 @@ class Command:
         #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='', fragment='')
         #>>> urlparse('img/screen.png?raw=true')
         #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='raw=true', fragment='')
-        url = urlparse(url).path #strip query string; img/screen.png?raw=true  >  img/screen.png
+        #>>> urlparse(r'file:///C:\Users\xxx\Downloads\cuda_markdown_image')
+        #ParseResult(scheme='file', netloc='', path='/C:\\Users\\xxx\\Downloads\\cuda_markdown_image', params='', query='', fragment='')
+        #>>> urlparse(r'C:\Users\xxx\Downloads\cuda_markdown_image')
+        #ParseResult(scheme='c', netloc='', path='\\Users\\xxx\\Downloads\\cuda_markdown_image', params='', query='', fragment='')
         
         #strip file:/// leading
         file_scheme_leading = re.findall("file:///", url)
