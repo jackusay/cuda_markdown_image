@@ -27,15 +27,16 @@ def log(s):
 def get_url(txt):
     """input line_text, return url"""
     #url can't mix with ), otherwise it become unsure ) is url or part of image syntax.
-    x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
+    x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) 
+        #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
     log(f"image syntax: {x}")
     if not x:
         log("Can't find image syntax.")
         return
     #q = re.search("!\[[^\]]+\]", x[0]) #get title ex: ![sdff]
     #log(q.group()[2:-1])
-    p = re.search("\([^\)]+", x[0]) #get () part ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
-    pp = p.group()[1:]
+    p = re.search("\([^\)]+", x[0]) #get (... part ex: (https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat"
+    pp = p.group()[1:] #strip prefix (
     url = pp.split("\"")[0].strip() #get url
     log(f"url: {url}")  
     return url
