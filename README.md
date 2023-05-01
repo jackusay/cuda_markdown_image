@@ -2,8 +2,8 @@
 
 
 * work only local image
-* can't use right parenthesis in url
 * `![aaa](bbb)` - In `bbb` part, if you put some behind url, it needs to be *behind* double quate. ex: `![alt text](a.jpg "title a1")`
+* if you use parenthesis inside bbb, the parenthesis must be paired in order to work.
 
 ```
 #local image, ok
@@ -12,13 +12,11 @@
 ![alt text](C:\aa bb\2023-12-30.png "title a1") #absolute path
 ![alt text](中/a c 文.jpg "title a1") #non ascii 
 ![alt text](file:///C:\Current Work\Service\12-30-34.png)
+![alt text](New folder/a002 (1) (2).jpg?key&ddd "title")
 
 #online image, no work
 ![alt text](https://example.com/img)
 ![alt text](http://example.com/img.jpg)
-
-#fail, duo to markdown image syntax limit, you can't use right parenthesis in url:
-![alt text](a (2).jpg "title a1") #wrong!
 
 #???
 ![alt text](//aa/bb/12-30-34.png)
