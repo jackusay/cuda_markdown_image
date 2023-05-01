@@ -86,7 +86,7 @@ class Command:
         #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='', fragment='')
         #>>> urlparse('img/screen.png?raw=true')
         #ParseResult(scheme='', netloc='', path='img/screen.png', params='', query='raw=true', fragment='')
-        url = urlparse(url).path #strip query string
+        url = urlparse(url).path #strip query string; img/screen.png?raw=true  >  img/screen.png
         
         #strip file:/// leading
         file_scheme_leading = re.findall("file:///", url)
