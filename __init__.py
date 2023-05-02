@@ -49,14 +49,14 @@ def get_url(txt):
     #In markdown's syntax, url can't mix with ), otherwise it become unsure ) is url or part of image syntax.
     #But we can **assume** the parenthesis must be paired.
     
-    x = re.findall("!\[[^\]]+\]\([^\)]+\)", txt) 
+    x = re.findall("!\[[^\]]*\]\([^\)]+\)", txt) 
         #get image syntax ex: ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
     #log(f"image syntax: {x}")
     if not x:
         #log("Can't find image syntax.")
         return
         
-    x = txt[re.search("!\[[^\]]+\]\(", txt).end()-1:] #strip  ![xxx]  part
+    x = txt[re.search("!\[[^\]]*\]\(", txt).end()-1:] #strip  ![xxx]  part
     rp = right_parenthesis_index(x)
     if not rp:
         log("The parenthesis must be paired in order to work.")

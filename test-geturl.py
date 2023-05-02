@@ -21,10 +21,15 @@ class GetUrlTestCase(unittest.TestCase):
         expected = r"C:\Users\Downloads\New folder\cuda_hilite"
         result = get_url(r'some idea ![Stocat](C:\Users\Downloads\New folder\cuda_hilite "The Storocat") do it.')
         self.assertEqual(result, expected)
+    def test_get_url_with_empty_bracket(self):
+        expected = r"C:\Users\Downloads\New folder\cuda_hilite"
+        result = get_url(r'some idea ![](C:\Users\Downloads\New folder\cuda_hilite "The Storocat") do it.')
+        self.assertEqual(result, expected)
 
 suite = unittest.TestSuite()
 suite.addTest(GetUrlTestCase('test_get_url'))
 suite.addTest(GetUrlTestCase('test_get_url_include_space'))
 suite.addTest(GetUrlTestCase('test_get_url_include_backslash'))
+suite.addTest(GetUrlTestCase('test_get_url_with_empty_bracket'))
 
 unittest.TextTestRunner(verbosity=2).run(suite)
